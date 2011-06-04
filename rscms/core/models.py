@@ -1,6 +1,8 @@
 from django.db import models
 from django.template import loader
-from defer import defer
+from rscms.core import tasks
+from os.path import abspath, join, dirname, abspath
+
 
 class Project(object):
 
@@ -8,17 +10,8 @@ class Project(object):
         self.name = name
         self.domain = domain
         self.path = path
-        self._recipes = []
-        return super(self, Project).__init__()
-
-    def get_recipes(self):
-        return self._recipes
-
-    def set_recipes(self, value):
-        self._recipes = value
-
-    # Use getter-setter for foreign keys future hooks
-    recipes = property(get_recipes, set_recipes, None, 'Installed recipes')
+        self.recipes = []
+        return super(Project, self).__init__()
 
     def build(self):
         for app in self.get_apps():
@@ -34,6 +27,9 @@ class Project(object):
             recipe.copy_raw()
         return self
 
+    def get_context(self):
+        return {'project': self}
+
     def render(self):
         for recipe in self.recipes:
             recipe.render()
@@ -46,13 +42,19 @@ class Recipe(object):
         self.project = project
         self.name = appname
         self.requirement = requirement
-        self.keys = []
+        # rendered files
+        self.vars = KeyStore(self)
         self.files = []
+        # copied files
         self.raw = []
-        return super(self, Recipe).__init__()
+        return super(Recipe, self).__init__()
 
     def get_context(self):
-        return {'recipe': self}
+        context = self.project.get_context()
+        context.update({
+            'recipe': self
+        })
+        return context
 
     def copy_raw(self):
         defers = []
@@ -76,23 +78,23 @@ class RawDirectory(object):
         self.recipe = recipe
         self.source = source
         self.target = target
-        return super(self, RawDirectory).__init__()
+        return super(RawDirectory, self).__init__()
 
 
-class KeyConfig(object):
+class Variable(object):
 
     def __init__(self, recipe, key, value):
         self.recipe = recipe
         self.key = key
         self.value = value
-        return super(self, KeyConfig).__init__()
+        return super(Variable, self).__init__()
 
 
 class KeyStore(dict):
 
     def __init__(self, recipe, *args, **kwds):
         self.recipe = recipe
-        return super(self, KeyStore).__init__(*args, **kwds)
+        return super(KeyStore, self).__init__(*args, **kwds)
 
 
 class FileConfig(object):
@@ -101,7 +103,7 @@ class FileConfig(object):
         self.recipe = recipe
         self.filename = filename
         self.template = template
-        return super(self, FileConfig).__init__()
+        return super(FileConfig, self).__init__()
 
     def render(self, context):
         return loader.render_to_string(self.template, context)

@@ -119,8 +119,10 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'core',
+    'recipes',
+    'recipes.base_project',
     'django_extensions',
-    'rscms.core',
 )
 
 # A sample logging configuration. The only tangible logging

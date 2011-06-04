@@ -1,0 +1,14 @@
+*.orig
+*.pyc
+*.sqlite
+.project
+.pydevproject
+.settings
+.installed.cfg
+bin/*
+downloads/*
+eggs/*
+develop-eggs/*
+parts/*
+example/*
+env/*
