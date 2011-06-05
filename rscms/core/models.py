@@ -1,7 +1,6 @@
-from django.db import models
 from django.template import loader
 from rscms.core import tasks
-from os.path import abspath, join, dirname, abspath
+from os.path import join
 
 
 class Project(object):
@@ -38,14 +37,13 @@ class Project(object):
 
 class Recipe(object):
 
-    def __init__(self, project, appname, requirement):
+    def __init__(self, project, name):
         self.project = project
-        self.name = appname
-        self.requirement = requirement
-        # rendered files
+        self.name = name
+        # rendered files and variables
         self.vars = KeyStore(self)
         self.files = []
-        # copied files
+        # copied folders
         self.raw = []
         return super(Recipe, self).__init__()
 
@@ -79,15 +77,6 @@ class RawDirectory(object):
         self.source = source
         self.target = target
         return super(RawDirectory, self).__init__()
-
-
-class Variable(object):
-
-    def __init__(self, recipe, key, value):
-        self.recipe = recipe
-        self.key = key
-        self.value = value
-        return super(Variable, self).__init__()
 
 
 class KeyStore(dict):

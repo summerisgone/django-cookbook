@@ -4,23 +4,37 @@ from django import template
 
 register = template.Library()
 
-class AllVars(Tag):
-    name = 'allvars'
+
+def isiterable(obj):
+    return bool(getattr(obj, '__iter__', False))
+
+
+class GetAllVars(Tag):
+    name = 'get_all_vars'
     options = Options(
         Argument('keyname'),
         'as',
-        Argument('varname', resolve=False)
+        Argument('varname', resolve=False, required=False)
     )
 
     def render_tag(self, context, keyname, varname):
         project = context['project']
         vars = []
         for recipe in project.recipes:
-            vars.extend(filter(lambda s: s.key == keyname, recipe.vars))
-        context[varname] = vars
+            if keyname in recipe.vars:
+                if isiterable(recipe.vars[keyname]):
+                    vars.extend(recipe.vars[keyname])
+                else:
+                    vars.append(recipe.vars[keyname])
+
+        if varname:
+            context[varname] = vars
+        else:
+            context[keyname] = vars
+
         return u''
 
-register.tag(AllVars)
+register.tag(GetAllVars)
 
 
 class GetValue(Tag):
@@ -35,13 +49,13 @@ class GetValue(Tag):
         project = context['project']
         value = None
         for recipe in project.recipes:
-            if keyname in [var.key for var in recipe.vars]:
+            if keyname in recipe.vars:
                 value = recipe.vars[keyname]
 
         if varname:
             context[varname] = value
-            return u''
         else:
-            return unicode(value)
+            context[keyname] = value
+        return u''
 
 register.tag(GetValue)

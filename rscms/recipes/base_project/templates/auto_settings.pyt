@@ -2,11 +2,13 @@
 {% load buildtags %}
 from settings import *
 
-SECRET_KEY = '{% getval SECRET_KEY %}'
+SECRET_KEY = '{% getval settings.SECRET_KEY %}'
 
-{% allvars INSTALLED_APPS as installed_apps %}
+{% get_all_vars 'settings.INSTALLED_APPS' as INSTALLED_APPS %}
+{{ INSTALLED_APPS }}
+
 INSTALLED_APPS += [
-    {% for var in installed_apps %}
-    '{{ var.value }}',
+    {% for var in INSTALLED_APPS %}
+    '{{ var }}',  # {{ var.key }}
     {% endfor %}
 ]

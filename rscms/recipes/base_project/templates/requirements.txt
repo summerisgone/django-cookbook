@@ -1,0 +1,5 @@
+{% load buildtags %}
+{% get_all_vars 'requirements' %}
+{% for var in requirement%}
+{{ var.value }}
+{% endfor %}
