@@ -1,5 +1,5 @@
 {% load buildtags %}
-{% get_all_vars 'requirements' %}
-{% for var in requirement%}
-{{ var.value }}
+{% get_all_vars 'requirements' as requirements %}
+{% for var in requirements %}
+{{ var }}
 {% endfor %}

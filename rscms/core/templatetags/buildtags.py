@@ -54,8 +54,8 @@ class GetValue(Tag):
 
         if varname:
             context[varname] = value
+            return u''
         else:
-            context[keyname] = value
-        return u''
+            return value
 
 register.tag(GetValue)
