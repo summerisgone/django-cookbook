@@ -1,7 +1,15 @@
 # -*- coding: utf8 -*-
-from django.conf.urls.defaults import url, patterns
-
+from django.conf.urls.defaults import url, patterns, include, handler404, handler500
 {% load buildtags %}
+
+{% get_all_vars 'urls.import' as imports %}
+{% for import in imports %}
+{{ import }}
+{% endfor %}
+
+{% getval 'urls.admin_autodiscover' %}
+{% getval 'urls.before_patterns' %}
+
 {% get_all_vars 'urls.patterns' as patterns %}
 
 urlpatterns = patterns('',

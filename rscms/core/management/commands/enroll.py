@@ -4,6 +4,7 @@ import os
 from optparse import make_option
 from rscms.core.models import Project
 from rscms.recipes.base_project.models import BaseProjectRecipe
+from rscms.recipes.admin.models import DjangoAdminRecipe
 
 class Command(BaseCommand):
     help = "Test site build"
@@ -25,7 +26,10 @@ class Command(BaseCommand):
             path=project_path)
 
         base_project_recipe = BaseProjectRecipe(project, project.name)
+        admin_recipe = DjangoAdminRecipe(project)
+
         project.recipes.append(base_project_recipe)
+        project.recipes.append(admin_recipe)
 
         project.copy_raw()
         project.render()

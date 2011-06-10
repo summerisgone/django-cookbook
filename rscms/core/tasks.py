@@ -31,8 +31,8 @@ def copy_folder(source_dir, target_dir, merge=True, overwrite=True):
                 )
 
         for dir in dirs:
-            if not exists(join(dst, rel_path, dir)):
-                os.mkdir(join(dst, rel_path, dir))
+            if not exists(join(target_dir, relative_path, dir)):
+                os.mkdir(join(target_dir, relative_path, dir))
 
 def write_file(path, content, overwrite=False):
     if not overwrite and exists(path):

@@ -15,25 +15,9 @@ class BaseProjectRecipe(AppRecipe):
         'auto_urls.pyt',
         'requirements.txt'
     ]
-    installed_apps = []
     urlpatterns = []
-    context_processors = [
-        'django.contrib.auth.context_processors.auth',
-        'django.core.context_processors.debug',
-        'django.core.context_processors.i18n',
-        'django.core.context_processors.media',
-        'django.core.context_processors.static',
-        'django.core.context_processors.request',
-        'django.contrib.messages.context_processors.messages',
-    ]
-    middleware_classes = [
-#     'django.middleware.gzip.GZipMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-    ]
+    context_processors = []
+    middleware_classes = []
 
 
     def __init__(self, project, appname, database='sqlite3'):

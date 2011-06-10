@@ -67,8 +67,13 @@ class AppRecipe(Recipe):
     middleware_classes = None
     context_processors = None
 
-    def __init__(self, project, appname):
-        super(AppRecipe, self).__init__(project, appname)
+    def __init__(self, project, appname=None):
+        if appname is None:
+            name = self.appname
+        else:
+            name = appname
+
+        super(AppRecipe, self).__init__(project, name)
         self.find_raw_folder()
         self.find_templates()
         self.init_vars()
@@ -76,9 +81,10 @@ class AppRecipe(Recipe):
     def find_raw_folder(self):
         target_dir = self.project.path
         # Append raw folder in module
-        raw_dirname = join(dirname(self._file), 'raw')
-        if exists(raw_dirname) and isdir(raw_dirname):
-            self.raw.append(RawDirectory(self, raw_dirname, target_dir))
+        if getattr(self, '_file', None):
+            raw_dirname = join(dirname(self._file), 'raw')
+            if exists(raw_dirname) and isdir(raw_dirname):
+                self.raw.append(RawDirectory(self, raw_dirname, target_dir))
 
     def find_templates(self):
         for template in self.templates:
@@ -90,13 +96,12 @@ class AppRecipe(Recipe):
 
     def init_vars(self):
         if self.requirements:
-            if self.requirements:
-                self.vars['requirements'] = self.requirements
-            if self.installed_apps:
-                self.vars['settings.INSTALLED_APPS'] = self.installed_apps
-            if self.middleware_classes:
-                self.vars['settings.MIDDLEWARE_CLASSES'] = self.middleware_classes
-            if self.context_processors:
-                self.vars['settings.CONTEXT_PROCESSORS'] = self.context_processors
-            if self.urlpatterns:
-                self.vars['urls.patterns'] = self.urlpatterns
+            self.vars['requirements'] = self.requirements
+        if self.installed_apps:
+            self.vars['settings.INSTALLED_APPS'] = self.installed_apps
+        if self.middleware_classes:
+            self.vars['settings.MIDDLEWARE_CLASSES'] = self.middleware_classes
+        if self.context_processors:
+            self.vars['settings.CONTEXT_PROCESSORS'] = self.context_processors
+        if self.urlpatterns:
+            self.vars['urls.patterns'] = self.urlpatterns
