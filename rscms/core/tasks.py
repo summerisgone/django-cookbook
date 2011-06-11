@@ -1,8 +1,8 @@
+from os.path import join, exists, dirname
+import os
 import re
 import shutil
-import os
 import sys
-from os.path import join, exists
 
 
 def copy_folder(source_dir, target_dir, merge=True, overwrite=True):
@@ -35,6 +35,9 @@ def copy_folder(source_dir, target_dir, merge=True, overwrite=True):
                 os.mkdir(join(target_dir, relative_path, dir))
 
 def write_file(path, content, overwrite=False):
+    target_dir = dirname(path)
+    if not exists(target_dir):
+        os.makedirs(target_dir)
     if not overwrite and exists(path):
         fileobj = open(path, 'w+')
     else:
