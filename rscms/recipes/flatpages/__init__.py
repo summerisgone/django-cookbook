@@ -3,7 +3,6 @@ from core.helpers import AppRecipe, url_helper
 
 
 class FlatpagesRecipe(AppRecipe):
-    _file = __file__
     appname = 'django.contrib.flatpages'
     installed_apps = [
         'django.contrib.flatpages',

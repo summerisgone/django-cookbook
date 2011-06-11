@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*- 
+from core.importpath import importpath
 from core.models import RawDirectory, Recipe, FileConfig
 from django.template import loader
 from os.path import join, dirname, abspath, exists, isdir
@@ -81,10 +82,10 @@ class AppRecipe(Recipe):
     def find_raw_folder(self):
         target_dir = self.project.path
         # Append raw folder in module
-        if getattr(self, '_file', None):
-            raw_dirname = join(dirname(self._file), 'raw')
-            if exists(raw_dirname) and isdir(raw_dirname):
-                self.raw.append(RawDirectory(self, raw_dirname, target_dir))
+        module = (importpath(self.__module__))
+        raw_dirname = join(dirname(module.__file__), 'raw')
+        if exists(raw_dirname) and isdir(raw_dirname):
+            self.raw.append(RawDirectory(self, raw_dirname, target_dir))
 
     def find_templates(self):
         for template in self.templates:

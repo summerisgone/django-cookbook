@@ -7,8 +7,6 @@ import django
 
 
 class BaseProjectRecipe(AppRecipe):
-
-    _file = __file__
     requirements = 'django'
     templates = [
         'auto_settings.pyt',
