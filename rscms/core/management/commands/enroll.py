@@ -3,9 +3,7 @@ from os.path import abspath, join, dirname, abspath
 import os
 from optparse import make_option
 from rscms.core.models import Project
-from rscms.recipes.base_project.models import BaseProjectRecipe
-from rscms.recipes.admin.models import DjangoAdminRecipe
-from rscms.recipes.flatpages.models import FlatpagesRecipe
+import recipes
 
 class Command(BaseCommand):
     help = "Test site build"
@@ -21,18 +19,17 @@ class Command(BaseCommand):
         os.getcwd()
 
         project_path = join(os.getcwd(), options['project_name'])
-
         # New project
         project = Project(name=options['project_name'], domain=options['domain'],
             path=project_path)
 
-        base_project_recipe = BaseProjectRecipe(project, project.name)
-        admin_recipe = DjangoAdminRecipe(project)
-        flatpages_recipe = FlatpagesRecipe(project)
+        recipes.autodiscover()
 
-        project.recipes.append(base_project_recipe)
-        project.recipes.append(admin_recipe)
-        project.recipes.append(flatpages_recipe)
+        base_recipe = recipes.registry.get_base_recipe()(project, project.name)
+        project.recipes.append(base_recipe)
+
+        for RecipeCls in recipes.registry.all():
+            project.recipes.append(RecipeCls(project))
 
         project.copy_raw()
         project.render()

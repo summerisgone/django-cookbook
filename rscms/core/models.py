@@ -1,5 +1,5 @@
 from django.template import loader
-from rscms.core import tasks
+from core import tasks
 from os.path import join
 
 
