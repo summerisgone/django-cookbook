@@ -89,6 +89,7 @@ SECRET_KEY = '$u!n6%l+cwild!dxbw5d)fex$oz7=cz=t$zkgz%!s05j75@l9u'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'core.template_loader.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
 
@@ -121,8 +122,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'core',
     'recipes',
-    'recipes.base_project',
-    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging
