@@ -10,7 +10,7 @@ class Project(object):
         self.domain = domain
         self.path = path
         self.recipes = []
-        return super(Project, self).__init__()
+        super(Project, self).__init__()
 
     def build(self):
         for app in self.get_apps():
@@ -18,7 +18,7 @@ class Project(object):
                 fileconfig.render(app, self)
 
     def prepare(self):
-        '''Prepare folder structure'''
+        """Prepare folder structure"""
         return self
 
     def copy_raw(self):
@@ -45,7 +45,7 @@ class Recipe(object):
         self.files = []
         # copied folders
         self.raw = []
-        return super(Recipe, self).__init__()
+        super(Recipe, self).__init__()
 
     def get_context(self):
         context = self.project.get_context()
@@ -76,14 +76,14 @@ class RawDirectory(object):
         self.recipe = recipe
         self.source = source
         self.target = target
-        return super(RawDirectory, self).__init__()
+        super(RawDirectory, self).__init__()
 
 
 class KeyStore(dict):
 
     def __init__(self, recipe, *args, **kwds):
         self.recipe = recipe
-        return super(KeyStore, self).__init__(*args, **kwds)
+        super(KeyStore, self).__init__(*args, **kwds)
 
 
 class FileConfig(object):
@@ -92,7 +92,7 @@ class FileConfig(object):
         self.recipe = recipe
         self.filename = filename
         self.template = template
-        return super(FileConfig, self).__init__()
+        super(FileConfig, self).__init__()
 
     def render(self, context):
         return loader.render_to_string(self.template, context)
