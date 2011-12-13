@@ -1,98 +1,89 @@
 from django.template import loader
+from django.db import models
+from django.core.validators import RegexValidator
+from django.conf import settings
 from core import tasks
 from os.path import join
 
 
-class Project(object):
+VARIABLE_TYPE_STRING = 0
+VARIABLE_TYPE_UNICODE = 1
+VARIABLE_TYPE_LIST = 2
+VARIABLE_TYPE_DICT = 3
+VARIABLE_TYPE_OTHER = -1
+VARIABLE_TYPE_CHOICES = (
+    ('String', VARIABLE_TYPE_STRING),
+    ('Unicode string', VARIABLE_TYPE_UNICODE),
+    ('List', VARIABLE_TYPE_LIST),
+    ('Dictionary', VARIABLE_TYPE_DICT),
+    ('Other', VARIABLE_TYPE_OTHER),
+)
 
-    def __init__(self, name, domain, path):
-        self.name = name
-        self.domain = domain
-        self.path = path
-        self.recipes = []
-        super(Project, self).__init__()
+PROJECT_BUILDER_DJANGO = 0
+PROJECT_BUILDER_CHOICES = (
+    ('Django project', PROJECT_BUILDER_DJANGO),
+)
 
-    def build(self):
-        for app in self.get_apps():
-            for fileconfig in app.get_files():
-                fileconfig.render(app, self)
+RECIPE_BUILDER_APP = 0
+RECIPE_BUILDER_CHOICES = (
+    ('Django app', RECIPE_BUILDER_APP),
+)
 
-    def prepare(self):
-        """Prepare folder structure"""
-        return self
+package_valid_name = RegexValidator(regex='^[a-zA-Z][a-zA-Z0-9_]+$',
+        message='Should be a valid python package name')
 
-    def copy_raw(self):
-        for recipe in self.recipes:
-            recipe.copy_raw()
-        return self
-
-    def get_context(self):
-        return {'project': self}
-
-    def render(self):
-        for recipe in self.recipes:
-            recipe.render()
-        return self
+variable_valid_name = RegexValidator(regex='^[a-zA-Z0-9_]+$',
+        message='Should be a valid python variable name')
 
 
-class Recipe(object):
+class Project(models.Model):
 
-    def __init__(self, project, name):
-        self.project = project
-        self.name = name
-        # rendered files and variables
-        self.vars = KeyStore(self)
-        self.files = []
-        # copied folders
-        self.raw = []
-        super(Recipe, self).__init__()
-
-    def get_context(self):
-        context = self.project.get_context()
-        context.update({
-            'recipe': self
-        })
-        return context
-
-    def copy_raw(self):
-        defers = []
-        for raw in self.raw:
-            defers.append(tasks.copy_folder(raw.source,
-                join(self.project.path, raw.target)))
-        return defers
+    name = models.CharField('Project name', max_length=16,
+        validators=[package_valid_name])
+    description = models.CharField('Project description', max_length=255)
+    project_builder = models.IntegerField('Project builder', choices=PROJECT_BUILDER_CHOICES)
+    download = models.FileField('Download project archive',
+        upload_to=join(settings.UPLOAD_ROOT, 'projects'), null=True, blank=True)
 
     def render(self):
-        defers = []
-        for fileconfig in self.files:
-            content = fileconfig.render(self.get_context())
-            defers.append(tasks.write_file(join(self.project.path,
-                fileconfig.filename), content))
-        return defers
+        for recipe in self.recipes:
+            recipe.cook()
+        return self
 
 
-class RawDirectory(object):
+class Requirement(models.Model):
 
-    def __init__(self, recipe, source, target):
-        self.recipe = recipe
-        self.source = source
-        self.target = target
-        super(RawDirectory, self).__init__()
-
-
-class KeyStore(dict):
-
-    def __init__(self, recipe, *args, **kwds):
-        self.recipe = recipe
-        super(KeyStore, self).__init__(*args, **kwds)
+    requires = models.CharField('Depends on these packages', max_length=255)
+    recommends = models.CharField('Recommends these packages', max_length=255)
+    replaces = models.CharField('Replaces these packages', max_length=255)
+    suggests = models.CharField('Suggests to use these packages', max_length=255)
 
 
-class FileConfig(object):
+class Recipe(models.Model):
 
-    def __init__(self, recipe, filename, template):
-        self.recipe = recipe
-        self.filename = filename
-        self.template = template
-        super(FileConfig, self).__init__()
+    project = models.ForeignKey(Project, related_name='recipes')
+    # TODO: Insert choices fetch into constructor
+    provided_package = models.CharField('Provided package', max_length=100,
+        validators=[package_valid_name])
+    recipe_template = models.IntegerField('Recipe builder', choices=RECIPE_BUILDER_CHOICES)
+    templates = models.FileField('Archive with templates for recipe',
+        upload_to=join(settings.UPLOAD_ROOT, 'templates'))
+    # Metadata:
+    author = models.ForeignKey('auth.User')
+    requirements = models.OneToOneField(Requirement)
 
-    def render(self, context):
-        return loader.render_to_string(self.template, context)
+    def cook(self):
+        pass
+
+
+class Variable(models.Model):
+
+    project = models.ForeignKey(Project, related_name='variables')
+    recipe = models.ForeignKey(Recipe, null=True, blank=True, related_name='variables')
+    name = models.CharField('Variable name', max_length=255,
+        validators=[variable_valid_name])
+    description = models.CharField('Meaning of variable', max_length=255,
+        null=True, blank=True)
+    val = models.CharField('Value', max_length=255, null=True, blank=True)
+    var_type = models.IntegerField('Variable type',
+        choices=VARIABLE_TYPE_CHOICES, default=VARIABLE_TYPE_STRING)

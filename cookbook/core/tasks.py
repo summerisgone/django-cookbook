@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#This file contains functions for background tasks
 from os.path import join, exists, dirname
 import os
 import re
@@ -6,12 +8,12 @@ import sys
 
 
 def copy_folder(source_dir, target_dir, merge=True, overwrite=True):
-    '''
+    """
     Copy source folder to target. 
     If merge=False, deletes and creates target folder.
     If overwrite=False, exising files will remain untouched.
     By default, merges target dir to source with overwriting existing files  
-    '''
+    """
     if not merge and exists(target_dir):
         shutil.rmtree(target_dir)
         os.mkdir(target_dir)

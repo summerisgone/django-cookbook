@@ -3,6 +3,7 @@
 *.sqlite
 .project
 .pydevproject
+.idea/*
 .settings
 .installed.cfg
 bin/*
