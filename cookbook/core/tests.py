@@ -16,6 +16,5 @@ class DjangoEmptyProject(TestCase):
     def test_django_builder(self):
         from core.models import Project, PROJECT_BUILDER_DJANGO
         from core.builders import DjangoBuilder
-        project = Project(name='test_project', project_builder=PROJECT_BUILDER_DJANGO)
+        project = Project.objects.create(name='test_project', project_builder=PROJECT_BUILDER_DJANGO)
         builder = DjangoBuilder(project)
-
