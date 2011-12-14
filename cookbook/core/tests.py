@@ -4,7 +4,6 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-from django.test.client import Client
 from django.test import TestCase
 
 
@@ -15,6 +14,6 @@ class DjangoEmptyProject(TestCase):
 
     def test_django_builder(self):
         from core.models import Project, PROJECT_BUILDER_DJANGO
-        from core.builders import DjangoBuilder
+        from core.tasks import write_project
         project = Project.objects.create(name='test_project', project_builder=PROJECT_BUILDER_DJANGO)
-        builder = DjangoBuilder(project)
+        write_project(project)

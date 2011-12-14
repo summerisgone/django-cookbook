@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 #This file contains functions for background tasks
+from core.models import PROJECT_BUILDER_DJANGO
+from core.builders import DjangoBuilder
 from os.path import join, exists, dirname
 import os
-import re
 import shutil
-import sys
+
+
+def write_project(project):
+    if project.project_builder == PROJECT_BUILDER_DJANGO:
+        builder = DjangoBuilder(project)
+    else:
+        return
+    builder.build()
 
 
 def copy_folder(source_dir, target_dir, merge=True, overwrite=True):
@@ -45,4 +53,4 @@ def write_file(path, content, overwrite=False):
     else:
         fileobj = open(path, 'w')
     fileobj.write(content)
-    fileobj.close
+    fileobj.close()

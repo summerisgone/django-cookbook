@@ -1,8 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.core.validators import RegexValidator
 from django.conf import settings
-from core import tasks
 from os.path import join
+import pprint
 
 
 VARIABLE_TYPE_STRING = 0
@@ -49,6 +50,15 @@ class Project(models.Model):
             recipe.cook()
         return self
 
+    def __getitem__(self, key):
+        """
+        Imitate dictionary behavior
+        """
+        try:
+            return self.variables.get(name=key)
+        except ObjectDoesNotExist:
+            return None
+
 
 class Requirement(models.Model):
 
@@ -83,3 +93,21 @@ class Variable(models.Model):
     val = models.CharField('Value', max_length=255, null=True, blank=True)
     var_type = models.IntegerField('Variable type',
         choices=VARIABLE_TYPE_CHOICES, default=VARIABLE_TYPE_STRING)
+
+    def render(self):
+        if self.var_type in (VARIABLE_TYPE_STRING, VARIABLE_TYPE_UNICODE):
+            return self.val
+        if self.var_type == VARIABLE_TYPE_LIST:
+            l = self.val.split(';')
+            return pprint.pformat(l)
+        if self.var_type == VARIABLE_TYPE_DICT:
+            d = simplejson.loads(self.val)
+            return pprint.pformat(d)
+        else:
+            return ''
+
+    def __unicode__(self):
+        return self.render()
+
+    def __str__(self):
+        return self.render()
