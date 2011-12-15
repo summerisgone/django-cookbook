@@ -3,13 +3,14 @@ from random import choice
 from core.models import Variable
 from os.path import dirname, join
 from django.conf import settings
+from django.template import Context, Template
+import tarfile
 import os
 import re
 try:
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO
-import tarfile
 
 class DjangoBuilder(object):
     """
@@ -41,7 +42,6 @@ class DjangoBuilder(object):
 
     def build(self):
         filename = join(settings.UPLOAD_ROOT, 'projects', 'project-%s.tar.gz' % self.project.pk)
-        reldir = self.template_dir
 
         # Prepare output structure
         if not os.path.exists(os.path.dirname(filename)):
@@ -59,13 +59,20 @@ class DjangoBuilder(object):
 
             for d in dirs:
                 tar_dirname = join(rel_root, self.render_dirname(d))
-
-                print 'Add directory ', tar_dirname
                 tar.add(join(root, d), arcname=tar_dirname, recursive=False)
 
             for f in files:
-                tar_filename = join(rel_root, f)
-                print 'Add file ', tar_filename
-                tar.add(join(root, f), arcname=tar_filename)
+                if f.endswith('_tmpl'):
+                    # render template to tar
+                    t = Template(open(join(root, f), 'r').read())
+                    rendered = t.render(Context(self.project.to_dict()))
+
+                    tarinfo = tarfile.TarInfo(f.split('_tmpl')[0])
+                    tarinfo.size = len(rendered)
+
+                    tar.addfile(tarinfo, StringIO(rendered.encode('utf-8')))
+                else:
+                    tar_filename = join(rel_root, f)
+                    tar.add(join(root, f), arcname=tar_filename)
 
         tar.close()

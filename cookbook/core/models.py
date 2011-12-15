@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.core.validators import RegexValidator
 from django.conf import settings
+from django.utils import simplejson
 from os.path import join
 import pprint
 
@@ -58,6 +59,15 @@ class Project(models.Model):
             return self.variables.get(name=key)
         except ObjectDoesNotExist:
             return None
+
+    def to_dict(self):
+        """
+        Return dictionary for variable set, for context constructors
+        """
+        d = {}
+        for var in self.variables.all():
+            d.update({var.name: var})
+        return d
 
 
 class Requirement(models.Model):
