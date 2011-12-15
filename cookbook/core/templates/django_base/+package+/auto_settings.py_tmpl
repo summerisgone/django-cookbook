@@ -1,0 +1,36 @@
+# -*- coding: utf8 -*-
+from settings import *
+from os.path import join, dirname
+
+ADMINS = (
+    ('admin', 'info@{{ domain }}'),
+)
+
+MANAGERS = (
+    ('manager', 'info@{{ domain }}'),
+)
+
+EMAIL_SUBJECT_PREFIX = '[{{ package }}]'
+
+PROJECT_DIR = dirname(__file__)
+
+# DATABASES = {{ DATABASES }}
+SECRET_KEY = '{{ SECRET_KEY }}'
+ROOT_URLCONF = '{{ package }}.auto_urls'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = join(PROJECT_DIR, 'media')
+
+UPLOAD_DIR = 'upload'
+UPLOAD_URL = MEDIA_URL + UPLOAD_DIR
+
+# ADMIN_MEDIA_PREFIX = '/media/admin/'
+
+TEMPLATE_DIRS = [join(PROJECT_DIR, 'templates'),]
+
+FIXTURE_DIRS = [join(PROJECT_DIR, 'fixtures'),]
+
+# FCGI Server settings
+FORCE_SCRIPT_NAME = ''
+
+TEST = {{ TEST|safe }}
