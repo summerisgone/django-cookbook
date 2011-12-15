@@ -22,12 +22,12 @@ VARIABLE_TYPE_CHOICES = (
 
 PROJECT_BUILDER_DJANGO = 0
 PROJECT_BUILDER_CHOICES = (
-    ('Django project', PROJECT_BUILDER_DJANGO),
+    (PROJECT_BUILDER_DJANGO, 'Django project'),
 )
 
 RECIPE_BUILDER_APP = 0
 RECIPE_BUILDER_CHOICES = (
-    ('Django app', RECIPE_BUILDER_APP),
+    ( RECIPE_BUILDER_APP, 'Django app'),
 )
 
 package_valid_name = RegexValidator(regex='^[a-zA-Z][a-zA-Z0-9_]+$',
@@ -58,7 +58,7 @@ class Project(models.Model):
         try:
             return self.variables.get(name=key)
         except ObjectDoesNotExist:
-            return None
+            return getattr(self, key)
 
     def to_dict(self):
         """
@@ -68,6 +68,9 @@ class Project(models.Model):
         for var in self.variables.all():
             d.update({var.name: var})
         return d
+
+    def __unicode__(self):
+        return u'Project %s' % self.name
 
 
 class Requirement(models.Model):
@@ -103,6 +106,7 @@ class Variable(models.Model):
     val = models.CharField('Value', max_length=255, null=True, blank=True)
     var_type = models.IntegerField('Variable type',
         choices=VARIABLE_TYPE_CHOICES, default=VARIABLE_TYPE_STRING)
+    editable = models.BooleanField('Available for edit', default=False)
 
     def render(self):
         if self.var_type in (VARIABLE_TYPE_STRING, VARIABLE_TYPE_UNICODE):

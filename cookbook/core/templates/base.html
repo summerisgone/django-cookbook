@@ -7,7 +7,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<title></title>
+	<title>Django cookbook</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
     {% compress css %}
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
@@ -19,12 +19,12 @@
 </head>
 <body>
 
-<div id="container" class="container_12 wrapper">
-	<div class="grid_12"><header>
+<div id="container" class="wrapper">
+	<div class="container_12 "><header>
     {% block header %}{% endblock header %}
 	</header></div>
 
-    <div class="grid_12">
+    <div class="container_12 ">
     <div id="main" role="main">
     {% block content %}{% endblock %}
 	</div></div>
@@ -32,9 +32,7 @@
 <div class="footer_push"></div>
 </div> <!--! end of #container -->
 <footer class="container_12">
-<div class="grid_12">
     {% block footer %}Footer{% endblock %}
-</div>
 </footer>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>

@@ -128,6 +128,8 @@ INSTALLED_APPS = (
     'compressor',
     'crispy_forms',
     'core',
+    # devel
+#    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging

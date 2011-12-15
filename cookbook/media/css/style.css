@@ -195,6 +195,23 @@ body {
     background:  url('../img/graphy.png');
 }
 
+h1, h2 {
+    text-shadow: 1px 1px 2px #d6d6d6;
+}
+
+.code {
+    padding: 10px;
+    background-color: white;
+    color: #222;
+    line-height: 1.2em;
+    border: 1px solid #C6C9CB;
+    font-size: 1.1em;
+    margin: 1.5em 0 1.5em 0;
+    width: 100%;
+    -webkit-box-shadow: 1px 1px 1px #d8d8d8;
+    -moz-box-shadow: 1px 1px 1px #d8d8d8;
+}
+
 header {
     height: 40px;
     background: rgba(39, 56, 84, 0.3);

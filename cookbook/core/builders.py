@@ -19,15 +19,24 @@ class DjangoBuilder(object):
 
     def __init__(self, project):
         self.project = project
-        self.template_dir = join(dirname(__file__), 'templates', 'buildres', 'django_base')
+        self.template_dir = join(dirname(__file__), 'templates', 'builders', 'django_base')
         self.init_vars()
         super(DjangoBuilder, self).__init__()
 
     def init_vars(self):
         secret_key = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for _ in range(50)])
-        Variable.objects.create(name='package', val=self.project.name, project=self.project)
-        Variable.objects.create(name='domain', val='example.com', project=self.project)
-        Variable.objects.create(name='SECRET_KEY', val=secret_key, project=self.project)
+        package, _ = Variable.objects.get_or_create(name='package', project=self.project, editable=True)
+        package.val = self.project.name
+        package.save()
+
+        domain, _ = Variable.objects.get_or_create(name='domain', project=self.project, editable=True)
+        domain.val = 'example.com'
+        domain.save()
+
+        key, _ = Variable.objects.get_or_create(name='SECRET_KEY', project=self.project)
+        key.val = secret_key
+        key.editable = False
+        key.save()
 
     def render_dirname(self, d):
         regexp = '.*\+([a-zA-Z][a-zA-Z0-9_]+)\+.*'
