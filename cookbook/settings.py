@@ -91,7 +91,6 @@ SECRET_KEY = '$u!n6%l+cwild!dxbw5d)fex$oz7=cz=t$zkgz%!s05j75@l9u'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    'core.template_loader.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
 
@@ -102,6 +101,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+CONTEXT_PROCESSORS = [
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages",
+    'django.core.context_processors.static',
+]
 
 ROOT_URLCONF = 'cookbook.urls'
 

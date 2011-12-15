@@ -19,7 +19,7 @@ class DjangoBuilder(object):
 
     def __init__(self, project):
         self.project = project
-        self.template_dir = join(dirname(__file__), 'templates', 'django_base')
+        self.template_dir = join(dirname(__file__), 'templates', 'buildres', 'django_base')
         self.init_vars()
         super(DjangoBuilder, self).__init__()
 
