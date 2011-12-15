@@ -191,9 +191,23 @@ table { border-collapse: collapse; border-spacing: 0; }
    Author: 
    ========================================================================== */
 
+body {
+    background:  url('../img/graphy.png');
+}
 
+header {
+    height: 40px;
+    background: rgba(39, 56, 84, 0.3);
+    padding: 20px;
+}
 
+#main {
+    padding: 20px;
+}
 
+footer {
+    background: rgba(39, 56, 84, 0.7);
+}
 
 
 
@@ -282,8 +296,8 @@ html, body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -30px; /* the bottom margin is the negative value of the footer's height */
 }
 footer, .footer_push {
-	height: 142px; /* .push must be the same height as .footer */
+	height: 30px; /* .push must be the same height as .footer */
 }
