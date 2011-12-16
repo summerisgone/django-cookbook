@@ -9,7 +9,15 @@ from django.template.response import TemplateResponse
 from forms import ConfigurationForm
 from django.views.generic.edit import CreateView
 from forms import NewProjectForm
+from django.views.generic import TemplateView
 
+
+class FrontpageView(TemplateView):
+
+    template_name = 'core/frontpage.html'
+
+    def get_context_data(self, **kwargs):
+        return {'projects': Project.objects.all()}
 
 class NewProjectView(CreateView):
     model = Project

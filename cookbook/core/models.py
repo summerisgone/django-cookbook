@@ -76,7 +76,7 @@ class Project(Configurable):
         return u'Project %s' % self.name
 
 
-class Requirement(Configurable):
+class Requirement(models.Model):
 
     requires = models.CharField('Depends on these packages', max_length=255)
     recommends = models.CharField('Recommends these packages', max_length=255)
@@ -84,8 +84,9 @@ class Requirement(Configurable):
     suggests = models.CharField('Suggests to use these packages', max_length=255)
 
 
-class Recipe(models.Model):
+class Recipe(Configurable):
 
+    author = models.ForeignKey('auth.User')
     project = models.ForeignKey(Project, related_name='recipes')
     # TODO: Insert choices fetch into constructor
     provided_package = models.CharField('Provided package', max_length=100,

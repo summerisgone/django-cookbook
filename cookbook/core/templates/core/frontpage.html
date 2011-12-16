@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid_4 prefix_2">
+    <h2>Project list</h2>
+    <ol>
+    {% for project in projects %}
+        <li>{{ project }} <a href="{% url build_project project.pk %}">build</a></li>
+    {% empty %}
+        <li>No projects</li>
+    {% endfor %}
+    </ol>
+    
+</div>
+<div class="grid_4">
+    <a href="{% url new_project %}"><h2>New project</h2></a>
+</div>
+    
+{% endblock content %}
