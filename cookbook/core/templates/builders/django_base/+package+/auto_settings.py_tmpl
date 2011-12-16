@@ -33,4 +33,3 @@ FIXTURE_DIRS = [join(PROJECT_DIR, 'fixtures'),]
 # FCGI Server settings
 FORCE_SCRIPT_NAME = ''
 
-TEST = {{ TEST|safe }}

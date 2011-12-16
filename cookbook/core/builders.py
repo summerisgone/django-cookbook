@@ -76,7 +76,7 @@ class DjangoBuilder(object):
                     t = Template(open(join(root, f), 'r').read())
                     rendered = t.render(Context(self.project.to_dict()))
 
-                    tarinfo = tarfile.TarInfo(f.split('_tmpl')[0])
+                    tarinfo = tarfile.TarInfo(join(rel_root, f.split('_tmpl')[0]))
                     tarinfo.size = len(rendered)
 
                     tar.addfile(tarinfo, StringIO(rendered.encode('utf-8')))
