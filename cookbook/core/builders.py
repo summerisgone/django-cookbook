@@ -25,15 +25,15 @@ class DjangoBuilder(object):
 
     def init_vars(self):
         secret_key = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for _ in range(50)])
-        package, _ = Variable.objects.get_or_create(name='package', project=self.project, editable=True)
+        package, _ = Variable.objects.get_or_create(name='package', conf=self.project, editable=True)
         package.val = self.project.name
         package.save()
 
-        domain, _ = Variable.objects.get_or_create(name='domain', project=self.project, editable=True)
+        domain, _ = Variable.objects.get_or_create(name='domain', conf=self.project, editable=True)
         domain.val = 'example.com'
         domain.save()
 
-        key, _ = Variable.objects.get_or_create(name='SECRET_KEY', project=self.project)
+        key, _ = Variable.objects.get_or_create(name='SECRET_KEY', conf=self.project)
         key.val = secret_key
         key.editable = False
         key.save()

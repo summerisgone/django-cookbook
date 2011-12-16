@@ -37,19 +37,7 @@ variable_valid_name = RegexValidator(regex='^[a-zA-Z0-9_]+$',
         message='Should be a valid python variable name')
 
 
-class Project(models.Model):
-
-    name = models.CharField('Project name', max_length=16,
-        validators=[package_valid_name])
-    description = models.CharField('Project description', max_length=255)
-    project_builder = models.IntegerField('Project builder', choices=PROJECT_BUILDER_CHOICES)
-    download = models.FileField('Download project archive',
-        upload_to=join(settings.UPLOAD_ROOT, 'projects'), null=True, blank=True)
-
-    def render(self):
-        for recipe in self.recipes:
-            recipe.cook()
-        return self
+class Configurable(models.Model):
 
     def __getitem__(self, key):
         """
@@ -69,11 +57,26 @@ class Project(models.Model):
             d.update({var.name: var})
         return d
 
+
+class Project(Configurable):
+
+    name = models.CharField('Project name', max_length=16,
+        validators=[package_valid_name])
+    description = models.CharField('Project description', max_length=255)
+    project_builder = models.IntegerField('Project builder', choices=PROJECT_BUILDER_CHOICES)
+    download = models.FileField('Download project archive',
+        upload_to=join(settings.UPLOAD_ROOT, 'projects'), null=True, blank=True)
+
+    def render(self):
+        for recipe in self.recipes:
+            recipe.cook()
+        return self
+
     def __unicode__(self):
         return u'Project %s' % self.name
 
 
-class Requirement(models.Model):
+class Requirement(Configurable):
 
     requires = models.CharField('Depends on these packages', max_length=255)
     recommends = models.CharField('Recommends these packages', max_length=255)
@@ -97,8 +100,7 @@ class Recipe(models.Model):
 
 class Variable(models.Model):
 
-    project = models.ForeignKey(Project, related_name='variables')
-    recipe = models.ForeignKey(Recipe, null=True, blank=True, related_name='variables')
+    conf = models.ForeignKey(Configurable, related_name='variables')
     name = models.CharField('Variable name', max_length=255,
         validators=[variable_valid_name])
     description = models.CharField('Meaning of variable', max_length=255,
