@@ -47,7 +47,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-PROJECT_ROOT = dirname(__file__)
+PROJECT_ROOT = dirname(dirname(__file__))
 MEDIA_ROOT = join(PROJECT_ROOT, 'media')
 UPLOAD_ROOT = join(MEDIA_ROOT, 'upload')
 
