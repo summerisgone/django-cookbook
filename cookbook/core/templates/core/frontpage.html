@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="grid_4 prefix_2">
-    <h2>Project list</h2>
+<div class="box box-gradient drop-shadow">
+    <h2 class="ribbon">Project list</h2>
     <ol>
     {% for project in projects %}
         <li>{{ project }} <a href="{% url build_project project.pk %}">build</a></li>
@@ -10,10 +11,17 @@
         <li>No projects</li>
     {% endfor %}
     </ol>
-    
+</div>
 </div>
 <div class="grid_4">
-    <a href="{% url new_project %}"><h2>New project</h2></a>
+    <div class="box box-gradient drop-shadow">
+        <h2 class="ribbon">Dashboard</h2>
+
+        <ul class="activities">
+            <li><a class="button disabled" href="{% url new_project %}">Login</a></li>
+            <li><a class="button add" href="{% url new_project %}">New project</a></li>
+        </ul>
+    </div>
 </div>
     
 {% endblock content %}

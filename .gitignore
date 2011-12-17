@@ -13,3 +13,5 @@ develop-eggs/*
 parts/*
 example/*
 env/*
+cookbook/media/upload/*
+static/*

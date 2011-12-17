@@ -2,8 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="grid_4 prefix_2">
-    <h2>Create new project</h2>
-    {% crispy form form.helper %}
+<div class="grid_8 prefix_2">
+    <div class="box box-gradient drop-shadow">
+    <h2 class="ribbon">Create new project</h2>
+        <div class="inner-box">
+        {% crispy form form.helper %}
+        </div>
     </div>
+</div>
 {% endblock content %}

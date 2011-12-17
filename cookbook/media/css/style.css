@@ -186,19 +186,10 @@ input:invalid, textarea:invalid { background-color: #f0dddd; }
 table { border-collapse: collapse; border-spacing: 0; }
 
 
+
 /* =============================================================================
-   Primary styles
-   Author: 
+   Reusable styles
    ========================================================================== */
-
-body {
-    background:  url('../img/graphy.png');
-}
-
-h1, h2 {
-    text-shadow: 1px 1px 2px #d6d6d6;
-}
-
 .code {
     padding: 10px;
     background-color: white;
@@ -212,10 +203,134 @@ h1, h2 {
     -moz-box-shadow: 1px 1px 1px #d8d8d8;
 }
 
+
+.drop-shadow {
+   position:relative;
+   width:90%;
+}
+
+.drop-shadow:before,
+.drop-shadow:after {
+   content:"";
+   position:absolute;
+   z-index:-1;
+   bottom:15px;
+   left:10px;
+   width:50%;
+   height:20%;
+   max-width:300px;
+   -moz-border-radius: 0 0 120px 120px / 0 0 6px 6px;
+   border-radius: 0 0 120px 120px / 0 0 6px 6px;
+   -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.3);
+   -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.3);
+   box-shadow:0 15px 10px rgba(0, 0, 0, 0.3);
+   -webkit-transform:rotate(-3deg);
+   -moz-transform:rotate(-3deg);
+   -o-transform:rotate(-3deg);
+   transform:rotate(-3deg);
+}
+
+.drop-shadow:after{
+   right:10px;
+   left:auto;
+   -webkit-transform:rotate(3deg);
+   -moz-transform:rotate(3deg);
+   -o-transform:rotate(3deg);
+   transform:rotate(3deg);
+ }
+
+.box-gradient {
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ffffff 0%, #f2f2f2 66%, #eeeeee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(66%,#f2f2f2), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#f2f2f2 66%,#eeeeee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#f2f2f2 66%,#eeeeee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#f2f2f2 66%,#eeeeee 100%); /* IE10+ */
+    background: linear-gradient(top,  #ffffff 0%,#f2f2f2 66%,#eeeeee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+}
+
+.ribbon:before {
+    content: "";
+    background-image: url('../img/corner.png');
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    position: absolute;
+    bottom: -11px;
+    left: 0;
+    width: 20px;
+    height: 10px;
+}
+
+.ribbon:after {
+    content: "";
+    background-image: url('../img/ending.png');
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    position: absolute;
+    top: -1px;
+    right: -11px;
+    width: 11px;
+    height: 33px;
+    z-index: 1;
+}
+
+.ribbon {
+    border: solid 1px #384bff;
+    display: inline-block;
+    padding: 3px 10px 3px 30px;
+    margin-left: -25px;
+    color: rgb(237, 237, 237);
+    text-shadow: 1px 1px 2px #384bff;
+    font-size: 16pt;
+    position: relative;
+    z-index: 0;
+    background: #4e7fff;
+    background: -moz-linear-gradient(top,  #4e7fff 0%, #2160ff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4e7fff), color-stop(100%,#2160ff));
+    background: -webkit-linear-gradient(top,  #4e7fff 0%,#2160ff 100%);
+    background: -o-linear-gradient(top,  #4e7fff 0%,#2160ff 100%);
+    background: -ms-linear-gradient(top,  #4e7fff 0%,#2160ff 100%);
+    background: linear-gradient(top,  #4e7fff 0%,#2160ff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4e7fff', endColorstr='#2160ff',GradientType=0 );
+}
+
+.quiet {
+    color: #666666;
+    font-size: small;
+}
+
+/* =============================================================================
+   Primary styles
+   ========================================================================== */
+
+body {
+    background:  url('../img/vichy.png');
+    box-shadow: 2px 0 150px 0 rgba(54, 54, 54, 0.15) inset
+}
+
+h1, h2 {
+    text-shadow: 1px 1px 2px #d6d6d6;
+}
+
 header {
-    height: 40px;
-    background: rgba(39, 56, 84, 0.3);
+    height: 50px;
+    background: #092e20;
+    background: rgba(9, 46, 32, 0.68);
     padding: 20px;
+}
+
+header h1 {
+    font-family: 'Amaranth', sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    color: white;
+    text-shadow: 1px 1px 2px #092e20;
+}
+
+header a.header-title {
+    text-decoration: none;
+    cursor: pointer;
 }
 
 #main {
@@ -223,11 +338,43 @@ header {
 }
 
 footer {
-    background: rgba(39, 56, 84, 0.7);
+    background: #092e20;
+    background: rgba(9, 46, 32, 0.68);
 }
 
+footer div {
+    padding-top: 7px;
+}
 
+/**** Frontpage ****/
 
+.box {
+    background: white;
+    border: solid 1px #dddddd;
+    padding: 4px;
+    padding-top: 10px;
+}
+
+.inner-box {
+    margin: 10px 20px;
+}
+
+.activities {
+   padding:  10px 0 0 10px;
+}
+
+ul.activities , ul.activities  li {
+    list-style: none;
+}
+
+ul.activities li {
+    margin: 5px 0;
+}
+
+.activities a.button {
+    /*text-decoration: none;*/
+    color: #333333;
+}
 
 /* =============================================================================
    Non-semantic helper classes
