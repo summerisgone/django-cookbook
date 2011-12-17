@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+<div class="grid_4 prefix_4 suff">
+    <div class="box box-gradient drop-shadow">
+        <h2 class="ribbon">Log in</h2>
+        <form class="uniForm" method="post" action=".">
+        <fieldset>
+        {{ form|crispy }}
+        </fieldset>
+            {% csrf_token %}
+        <div class="buttonHolder">
+            <a href="/" class="button">Cancel</a>
+            <input type="submit" name="submit" value="Log in" />
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

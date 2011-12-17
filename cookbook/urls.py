@@ -5,6 +5,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
     url(r'^', include('core.urls')),
+    url(r'auth/', include('account.urls')),
 )
 
 if settings.DEBUG:

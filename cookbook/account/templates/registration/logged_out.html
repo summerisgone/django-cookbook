@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="grid_4 prefix_4 suff">
+    <div class="box box-gradient drop-shadow">
+        <h2 class="ribbon">Logged out</h2>
+        <div class="inner-box">
+        <a href="{% url login %}">Log in again</a>
+        <a href="/">Frontpage</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

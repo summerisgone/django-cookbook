@@ -94,13 +94,13 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-)
+]
 
 CONTEXT_PROCESSORS = [
     "django.contrib.auth.context_processors.auth",
@@ -118,7 +118,7 @@ TEMPLATE_DIRS = (
     join(PROJECT_ROOT, 'templates')
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -128,9 +128,10 @@ INSTALLED_APPS = (
     'compressor',
     'crispy_forms',
     'core',
+    'account',
     # devel
 #    'django_extensions',
-)
+]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -156,5 +157,15 @@ LOGGING = {
 }
 
 
+LOGIN_REDIRECT_URL = '/'
+
 # Django compressor settings
 COMPRESS_OUTPUT_DIR = 'cache'
+
+
+# Development
+if DEBUG:
+    INTERNAL_IPS = ('127.0.0.1',)
+
+    INSTALLED_APPS += ['debug_toolbar']
+#    MIDDLEWARE_CLASSES += ['debug_toolbar.middleware.DebugToolbarMiddleware']

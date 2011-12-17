@@ -16,11 +16,19 @@
 <div class="grid_4">
     <div class="box box-gradient drop-shadow">
         <h2 class="ribbon">Dashboard</h2>
-
-        <ul class="activities">
-            <li><a class="button disabled" href="{% url new_project %}">Login</a></li>
-            <li><a class="button add" href="{% url new_project %}">New project</a></li>
-        </ul>
+        <div class="inner-box">
+            {% if user.is_authenticated %}
+            <h3>Welcome, {{ user.username }}!</h3>
+            {% endif %}
+            <ul class="activities">
+                {% if user.is_authenticated %}
+                <li><a class="button" href="{% url logout %}">Logout</a></li>
+                {% else %}
+                <li><a class="button" href="{% url login %}">Login</a></li>
+                {% endif %}
+                <li><a class="button add" href="{% url new_project %}">New project</a></li>
+            </ul>
+        </div>
     </div>
 </div>
     
